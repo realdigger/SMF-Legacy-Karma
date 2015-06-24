@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info">
+
+    <id>digger:legacy_karma</id>
+    <name>Legacy Karma</name>
+    <type>modification</type>
+    <version>1.0</version>
+
+    <install for="SMF 2.1 Beta2, SMF 2.1 - 2.1.99">
+        <require-dir name="Sources" destination="$boarddir"/>
+        <require-dir name="Themes" destination="$boarddir"/>
+        <code>add_settings.php</code>
+        <code>hooks.php</code>
+        <redirect url="?action=admin;area=modsettings"/>
+    </install>
+
+    <uninstall for="SMF 2.1 Beta2, SMF 2.1 - 2.1.99">
+        <remove-file name="$sourcedir/Mod-LegacyKarma.php"/>
+        <remove-dir name="$languagedir/LegacyKarma"/>
+        <code>hooks.php</code>
+    </uninstall>
+
+</package-info>
