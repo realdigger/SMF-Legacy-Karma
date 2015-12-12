@@ -7,8 +7,9 @@
  * @version 1.0
  */
 
-if (!defined('SMF'))
+if (!defined('SMF')) {
     die('Hacking attempt...');
+}
 
 
 /**
@@ -21,10 +22,13 @@ function loadLegacyKarmaHooks()
     add_integration_function('integrate_general_mod_settings', 'changeLegacyKarmaSettings', false);
     add_integration_function('integrate_menu_buttons', 'addLegacyKarmaCopyright', false);
 
-    if (empty($modSettings['legacy_karma_enabled'])) return;
+    if (empty($modSettings['legacy_karma_enabled'])) {
+        return;
+    }
 
     add_integration_function('integrate_menu_buttons', 'printLegacyKarmaForMember', false);
     //add_integration_function('integrate_query_message', 'showLegacyKarmaInMessage', false);
+    // TODO calculate summary likes and show it or sum with legacy
 }
 
 
@@ -55,15 +59,16 @@ function printLegacyKarmaForMember()
 
     loadLanguage('LegacyKarma/');
 
-    if (!empty($user_profile))
+    if (!empty($user_profile)) {
         foreach (array_keys($user_profile) as $user_id) {
             $legacy_karma = getLegacyKarmaByMemberID($user_id);
 
             if (!empty($legacy_karma)) {
-                $user_profile[$user_id]['personal_text'] .= $modSettings['legacy_karma_label'] . ': ' . $legacy_karma;
+                $user_profile[$user_id]['personal_text'] .= (!empty($user_profile[$user_id]['personal_text']) ? '<br>' : '') . $modSettings['legacy_karma_label'] . ': ' . $legacy_karma;
                 unset($legacy_karma);
             }
         }
+    }
 }
 
 
@@ -76,25 +81,36 @@ function getLegacyKarmaByMemberID($member_id = 0)
 {
     global $smcFunc;
 
-    if (!$member_id)
+    if (!$member_id) {
         return false;
+    }
 
-    $request = $smcFunc['db_query']('', '
+    // Check cache
+    $legacyKarma = cache_get_data('legacyKarma_' . $member_id);
+
+    if (empty($legacyKarma)) {
+
+        $request = $smcFunc['db_query']('', '
 			SELECT karma_good, karma_bad
 			FROM {db_prefix}members
 			WHERE id_member = {int:member_id}
 			LIMIT 1', array(
-            'member_id' => $member_id,
-        )
-    );
+                'member_id' => $member_id,
+            )
+        );
 
-    list ($karma_good, $karma_bad) = $smcFunc['db_fetch_row']($request);
-    $smcFunc['db_free_result']($request);
+        $legacyKarma = array();
+        list ($legacyKarma['good'], $legacyKarma['bad']) = $smcFunc['db_fetch_row']($request);
+        $smcFunc['db_free_result']($request);
 
-    if (!empty($karma_good) || !empty($karma_bad))
-        return (!empty($karma_good) ? '+' . $karma_good : '') . (!empty($karma_good) && !empty($karma_bad) ? '/' : '') . (!empty($karma_bad) ? '-' . $karma_bad : '');
-    else
+        cache_put_data('legacyKarma_' . $member_id, $legacyKarma);
+    }
+
+    if (!empty($legacyKarma['good']) || !empty($legacyKarma['bad'])) {
+        return (!empty($legacyKarma['good']) ? '+' . $legacyKarma['good'] : '') . (!empty($legacyKarma['good']) && !empty($legacyKarma['bad']) ? '/' : '') . (!empty($legacyKarma['bad']) ? '-' . $legacyKarma['bad'] : '');
+    } else {
         return false;
+    }
 }
 
 
@@ -105,6 +121,7 @@ function addLegacyKarmaCopyright()
 {
     global $context;
 
-    if ($context['current_action'] == 'credits')
+    if ($context['current_action'] == 'credits') {
         $context['copyrights']['mods'][] = '<a href="http://mysmf.ru/mods/legacy-karma">Legacy Karma</a> @ 2015, digger</a>';
+    }
 }
