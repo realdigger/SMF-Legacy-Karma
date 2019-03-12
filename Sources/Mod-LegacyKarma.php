@@ -1,9 +1,10 @@
 <?php
 /**
  * @package SMF Legacy Karma
- * @author digger http://mysmf.ru
- * @copyright 2015
- * @license CC BY-NC-ND 4.0 http://creativecommons.org/licenses/by-nc-nd/4.0/
+ * @author digger <digger@mysmf.net>
+ * @link https://github.com/realdigger/SMF-Legacy-Karma
+ * @copyright (c) 2015-2019, digger
+ * @license The MIT License (MIT) https://opensource.org/licenses/MIT
  * @version 1.0
  */
 
@@ -27,8 +28,6 @@ function loadLegacyKarmaHooks()
     }
 
     add_integration_function('integrate_menu_buttons', 'printLegacyKarmaForMember', false);
-    //add_integration_function('integrate_query_message', 'showLegacyKarmaInMessage', false);
-    // TODO calculate summary likes and show it or sum with legacy
 }
 
 
@@ -38,7 +37,7 @@ function loadLegacyKarmaHooks()
  */
 function changeLegacyKarmaSettings(&$config_vars = array())
 {
-    loadLanguage('LegacyKarma/');
+    loadLanguage('LegacyKarma/LegacyKarma');
 
     $config_vars = array_merge($config_vars,
         array(
@@ -57,7 +56,8 @@ function printLegacyKarmaForMember()
 {
     global $user_profile, $txt, $modSettings;
 
-    loadLanguage('LegacyKarma/');
+    loadLanguage('LegacyKarma/LegacyKarma');
+    // TODO calculate summary likes and show it or sum with legacy
 
     if (!empty($user_profile)) {
         foreach (array_keys($user_profile) as $user_id) {
@@ -122,6 +122,6 @@ function addLegacyKarmaCopyright()
     global $context;
 
     if ($context['current_action'] == 'credits') {
-        $context['copyrights']['mods'][] = '<a href="http://mysmf.ru/mods/legacy-karma">Legacy Karma</a> @ 2015, digger</a>';
+        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/legacy-karma" target="_blank">Legacy Karma</a> &copy; 2015-2019, digger';
     }
 }

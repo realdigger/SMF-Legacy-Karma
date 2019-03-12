@@ -5,9 +5,10 @@
     <id>digger:legacy_karma</id>
     <name>Legacy Karma</name>
     <type>modification</type>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <install for="SMF 2.1 Beta2, SMF 2.1 - 2.1.99">
+        <readme>README.bbc</readme>
         <require-dir name="Sources" destination="$boarddir"/>
         <require-dir name="Themes" destination="$boarddir"/>
         <code>add_settings.php</code>
