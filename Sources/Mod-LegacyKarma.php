@@ -122,6 +122,6 @@ function addLegacyKarmaCopyright()
     global $context;
 
     if ($context['current_action'] == 'credits') {
-        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/legacy-karma" target="_blank">Legacy Karma</a> &copy; 2015-2019, digger';
+        $context['copyrights']['mods'][] = '<a href="https://mysmf.net/mods/legacy-karma" target="_blank">Legacy Karma</a> &copy; 2015-2025, digger';
     }
 }
